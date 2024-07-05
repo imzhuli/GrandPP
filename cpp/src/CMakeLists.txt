@@ -46,6 +46,7 @@ set(lib_dependency
 aux_source_directory("./common"                    COMMON_SRC)
 aux_source_directory("./common_job"                COMMON_SRC)
 aux_source_directory("./common_protocol"           COMMON_SRC)
+aux_source_directory("./common_protocol/control"   COMMON_SRC)
 aux_source_directory("./common_server_group"       COMMON_SRC)
 aux_source_directory("./component"                 COMMON_SRC)
 aux_source_directory("./profiler"                  COMMON_SRC)

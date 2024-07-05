@@ -1,5 +1,6 @@
 #pragma once
 
+#include <config/config.hpp>
 #include <core/core_min.hpp>
 #include <core/core_stream.hpp>
 #include <core/core_time.hpp>
