@@ -1,46 +1,32 @@
 #pragma once
 #include "../base.hpp"
 
-class xControlMessage : protected xBinaryMessage {
-public:
-	xControlMessage() = delete;
-	xControlMessage(uint64_t ControlCommandId) {
-		this->ControlCommandId = ControlCommandId;
-		this->TraceId          = 0;
-	}
-	void SetTraceId(uint64_t TraceId) {
-		this->TraceId = TraceId;
-	}
-
+class xControlMessageHeader : public xBinaryMessage {
+protected:
 	void SerializeMembers() override {
-		W(ControlCommandId, TraceId);
+		W(ControlCommand, TraceId);
 	}
 	void DeserializeMembers() override {
-		R(ControlCommandId, TraceId);
+		R(ControlCommand, TraceId);
 	}
 
 public:
-	uint64_t ControlCommandId;
+	uint32_t ControlCommand;
 	uint64_t TraceId;
 
 public:
-	constexpr static const uint64_t CMD_REQ_TEST_DELAY        = 0x01;
-	constexpr static const uint64_t CMD_REQ_REPORT_TEST_DELAY = 0x02;
-	constexpr static const uint64_t CMD_REQ_ECHO              = 0x03;
-	constexpr static const uint64_t CMD_REQ_ECHO_RESP         = 0x04;
+	static constexpr const uint32_t CC_TestDelay     = 0x01;
+	static constexpr const uint32_t CC_TestDelayResp = 0x02;
+	static constexpr const uint32_t CC_Echo          = 0x03;
+	static constexpr const uint32_t CC_EchoResp      = 0x04;
 };
 
-class xControlMessage_RequireTestDelay : xControlMessage {
+class xControlMessage_TestDelay : public xBinaryMessage {
 protected:
-	xControlMessage_RequireTestDelay()
-		: xControlMessage(CMD_REQ_TEST_DELAY) {
-	}
 	void SerializeMembers() override {
-		xControlMessage::SerializeMembers();
 		W(TargetAddress);
 	}
 	void DeserializeMembers() override {
-		xControlMessage::DeserializeMembers();
 		R(TargetAddress);
 	}
 
@@ -48,22 +34,15 @@ public:
 	xNetAddress TargetAddress;
 };
 
-class xControlMessage_ReportTestSpeed : xControlMessage {
+class xControlMessage_TestSpeedResp : public xBinaryMessage {
 protected:
-	xControlMessage_ReportTestSpeed()
-		: xControlMessage(CMD_REQ_REPORT_TEST_DELAY) {
-	}
 	void SerializeMembers() {
-		xControlMessage::SerializeMembers();
-		W(TargetAddress, StartTimestampMS, FinishTimestampMS);
+		W(DiffTimestampMS);
 	}
 	void DeserializeMembers() {
-		xControlMessage::DeserializeMembers();
-		R(TargetAddress, StartTimestampMS, FinishTimestampMS);
+		R(DiffTimestampMS);
 	}
 
 public:
-	xNetAddress TargetAddress;
-	uint64_t    StartTimestampMS;
-	uint64_t    FinishTimestampMS;
+	uint64_t DiffTimestampMS;
 };

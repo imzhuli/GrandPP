@@ -49,6 +49,7 @@ aux_source_directory("./common_protocol"           COMMON_SRC)
 aux_source_directory("./common_protocol/control"   COMMON_SRC)
 aux_source_directory("./common_server_group"       COMMON_SRC)
 aux_source_directory("./component"                 COMMON_SRC)
+aux_source_directory("./component_control"         COMMON_SRC)
 aux_source_directory("./profiler"                  COMMON_SRC)
 add_library(app_common ${COMMON_SRC})
 
@@ -70,12 +71,14 @@ build_app(server_dns)
 build_app(server_proxy)
 
 build_app(test)
+build_app(test_echo_server)
 
 install(TARGETS
 	_server_dns
 	_server_proxy
 
 	_test
+	_test_echo_server
 
 	RUNTIME DESTINATION bin
 	ARCHIVE DESTINATION lib
