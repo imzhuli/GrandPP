@@ -71,7 +71,9 @@ build_app(server_dns)
 build_app(server_proxy)
 
 build_app(test)
+build_app(test_alloc)
 build_app(test_echo_server)
+build_app(test_http_proxy_client)
 
 install(TARGETS
 	_server_dns
