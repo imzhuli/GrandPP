@@ -2,7 +2,7 @@
 #include "./base.hpp"
 
 template <typename T>
-class xStaticPoolAllocator final : public xAllocator {
+class xPoolAllocator : public xAllocator {
 private:
 	struct xHolder {
 		alignas(T) ubyte _[sizeof(T)];
@@ -12,17 +12,10 @@ private:
 	static_assert(sizeof(xHolder) == sizeof(T));
 
 public:
-	xStaticPoolAllocator(size_t PoolSize) {
-		auto Opt = xel::xMemoryPoolOptions{
-			.InitSize          = PoolSize,
-			.Addend            = 0,
-			.MultiplierBy100th = 0,
-			.MaxSizeIncrement  = 0,
-			.MaxPoolSize       = PoolSize,
-		};
+	xPoolAllocator(const xMemoryPoolOptions & Opt) {
 		RuntimeAssert(Pool.Init(Opt));
 	}
-	~xStaticPoolAllocator() {
+	~xPoolAllocator() {
 		Pool.Clean();
 	}
 
@@ -37,5 +30,29 @@ protected:
 	void Free(void * vpObject) noexcept override {
 		auto P = X_Entry(vpObject, xHolder, _);
 		Pool.Destroy(P);
+	}
+};
+
+template <typename T>
+class xStaticPoolAllocator final : public xPoolAllocator<T> {
+private:
+	using xBase = xPoolAllocator<T>;
+	struct xHolder {
+		alignas(T) ubyte _[sizeof(T)];
+	};
+	static_assert(std::is_trivial_v<xHolder>);
+	static_assert(sizeof(xHolder) == sizeof(T));
+
+public:
+	xStaticPoolAllocator(size_t PoolSize)
+		: xBase(xMemoryPoolOptions{
+			  .InitSize          = PoolSize,
+			  .Addend            = 0,
+			  .MultiplierBy100th = 0,
+			  .MaxSizeIncrement  = 0,
+			  .MaxPoolSize       = PoolSize,
+		  }) {
+	}
+	~xStaticPoolAllocator() {
 	}
 };
