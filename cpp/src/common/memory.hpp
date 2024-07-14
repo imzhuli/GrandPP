@@ -37,11 +37,6 @@ template <typename T>
 class xStaticPoolAllocator final : public xPoolAllocator<T> {
 private:
 	using xBase = xPoolAllocator<T>;
-	struct xHolder {
-		alignas(T) ubyte _[sizeof(T)];
-	};
-	static_assert(std::is_trivial_v<xHolder>);
-	static_assert(sizeof(xHolder) == sizeof(T));
 
 public:
 	xStaticPoolAllocator(size_t PoolSize)
