@@ -44,6 +44,7 @@ set(lib_dependency
 
 # local libs
 aux_source_directory("./common"                    COMMON_SRC)
+aux_source_directory("./common_interface"          COMMON_SRC)
 aux_source_directory("./common_job"                COMMON_SRC)
 aux_source_directory("./common_protocol"           COMMON_SRC)
 aux_source_directory("./common_protocol/control"   COMMON_SRC)
