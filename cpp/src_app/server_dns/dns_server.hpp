@@ -1,6 +1,6 @@
 #pragma once
-#include "../common_job/async_request.hpp"
-#include "../component/dns_service.hpp"
+#include <pp_common/request.hpp>
+#include <pp_component/dns_service.hpp>
 
 struct xDnsRequestSource {
 	uint64_t RequestId;

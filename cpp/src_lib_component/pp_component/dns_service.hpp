@@ -1,7 +1,6 @@
 #pragma once
-#include "../common/base.hpp"
-#include "../common_job/job.hpp"
-
+#include <pp_common/base.hpp>
+#include <pp_common/job.hpp>
 #include <thread>
 #include <vector>
 

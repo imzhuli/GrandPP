@@ -1,5 +1,5 @@
 #pragma once
-#include "../common/base.hpp"
+#include <pp_common/base.hpp>
 
 static constexpr const size_t DEFAULT_MAX_TERMINAL_PROXY_CONNECTION_COUNT = 10'000;
 

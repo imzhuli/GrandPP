@@ -66,7 +66,7 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 	endif()
 endif()
 
-set(LIBRARY_OUTPUT_PATH                        "${PROJECT_BINARY_DIR}/bin")
+set(LIBRARY_OUTPUT_PATH                        "${PROJECT_BINARY_DIR}/lib")
 set(EXECUTABLE_OUTPUT_PATH                     "${PROJECT_BINARY_DIR}/bin")
 set(CMAKE_MODULE_PATH                          ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/Modules/")
 
@@ -123,4 +123,7 @@ set(LOCAL_3RD_CMAKE_DIR    "${LOCAL_3RD_LIBRARY_DIR}/cmake")
 # 	absl_failure_signal_handler absl_strerror absl_die_if_null absl_exponential_biased absl_int128 absl_base
 # )
 
-add_subdirectory(src)
+add_subdirectory(src_lib_common)
+add_subdirectory(src_lib_component)
+add_subdirectory(src_lib_protocol)
+add_subdirectory(src_app)

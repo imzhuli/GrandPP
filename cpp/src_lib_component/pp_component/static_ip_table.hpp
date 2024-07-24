@@ -1,6 +1,5 @@
 #pragma once
-#include "../common/base.hpp"
-
+#include <pp_common/base.hpp>
 #include <unordered_map>
 
 struct xStaticIpRecord {

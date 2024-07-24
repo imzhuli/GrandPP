@@ -1,24 +1,21 @@
 cmake_minimum_required(VERSION 3.14)
-project (h4x_apps)
-
-message(STATUS ${X_INCLUDE_DIRS})
-message(STATUS ${X_LIBRARY_DIRS})
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-find_package(MySQL REQUIRED)
+project (pp_apps)
 
 include_directories(
-	${DB_INCLUDE_DIRS}
+	../src_lib_common/
+	../src_lib_component/
+	../src_lib_protocol/
 	${LOCAL_3RD_INCLUDE_DIR}
 	${X_INCLUDE_DIRS}
 )
 
 link_directories(
+	${LIBRARY_OUTPUT_PATH}
 	${LOCAL_3RD_LIBRARY_DIR}
 	${X_LIBRARY_DIRS}
 )
 
-# message(STATUS ${LOCAL_3RD_LIBRARIES})
+set(LOCAL_PP_LIBRARIES ppcommon ppprotocol)
 
 # enable specific macors by system type:
 if (CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -34,42 +31,22 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 endif()
 
 set(lib_dependency
-	${MYSQL_LIBRARIES}
+	${LOCAL_PP_LIBRARIES}
 	${LOCAL_3RD_LIBRARIES}
 	${X_LIBRARIES}
 	${PLATFORM_LIBRARIES}
 	${cpp})
-
-# message(STATUS ${lib_dependency})
-
-# local libs
-aux_source_directory("./common"                    COMMON_SRC)
-aux_source_directory("./common_interface"          COMMON_SRC)
-aux_source_directory("./common_job"                COMMON_SRC)
-aux_source_directory("./common_protocol"           COMMON_SRC)
-aux_source_directory("./common_protocol/control"   COMMON_SRC)
-aux_source_directory("./common_server_group"       COMMON_SRC)
-aux_source_directory("./component"                 COMMON_SRC)
-aux_source_directory("./component_control"         COMMON_SRC)
-aux_source_directory("./profiler"                  COMMON_SRC)
-add_library(app_common ${COMMON_SRC})
-
-
-# aux_source_directory("../pb/pp2"               PB_SRC)
-# add_library(app_pb ${PB_SRC})
-# set(lib_dependency PRIVATE ${app_pb} ${lib_dependency})
 
 # applications
 function(build_app sub_dir_name)
 	aux_source_directory(${sub_dir_name} LOCAL_SOURCE_CODE)
 	add_executable(_${sub_dir_name} ${LOCAL_SOURCE_CODE})
 	target_compile_definitions(_${sub_dir_name} PRIVATE X_OPTION_STATIC)
-	target_link_libraries(_${sub_dir_name} PRIVATE app_common)
+	target_link_libraries(_${sub_dir_name} PRIVATE ppprotocol ppcomponent ppcommon)
 	target_link_libraries(_${sub_dir_name} PRIVATE ${lib_dependency})
 endfunction()
 
 build_app(server_dns)
-build_app(server_proxy)
 
 install(TARGETS
 	_server_dns

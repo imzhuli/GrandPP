@@ -1,6 +1,6 @@
 #include "./dns_server.hpp"
 
-#include "../common_protocol/network.hpp"
+#include <pp_protocol/network.hpp>
 
 static std::vector<xPacketCommandId> InterestedCommandIds = { Cmd_HostQuery };
 

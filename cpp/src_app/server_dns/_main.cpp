@@ -1,7 +1,7 @@
-#include "../component/dns_service.hpp"
 #include "./dns_server.hpp"
 
 #include <iostream>
+#include <pp_component/dns_service.hpp>
 
 using namespace xel;
 using namespace std;

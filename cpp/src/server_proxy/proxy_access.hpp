@@ -1,5 +1,4 @@
 #pragma once
-#include "../common/base.hpp"
 #include "../common_protocol/client_auth.hpp"
 #include "../common_protocol/data_exchange.hpp"
 #include "../common_protocol/network.hpp"
@@ -7,6 +6,7 @@
 #include "./proxy_dispatcher_client.hpp"
 #include "./proxy_relay_client.hpp"
 
+#include <pp_common/base.hpp>
 #include <unordered_map>
 
 static constexpr const uint64_t TCP_CONNECTION_AUTH_TIMEOUT_MS  = 10'000;  // auth and connection

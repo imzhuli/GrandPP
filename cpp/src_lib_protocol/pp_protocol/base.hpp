@@ -1,5 +1,5 @@
 #pragma once
-#include "../common/base.hpp"
+#include <pp_common/base.hpp>
 
 class xGroupedMessage : public xBinaryMessage {
 public:
@@ -11,5 +11,5 @@ public:
 	}
 
 public:
-	uint32_t GroupId = 0;
+	xGroupId GroupId = 0;
 };

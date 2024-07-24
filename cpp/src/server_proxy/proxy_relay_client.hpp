@@ -1,6 +1,7 @@
 #pragma once
-#include "../common/base.hpp"
 #include "../profiler/base.hpp"
+
+#include <pp_common/base.hpp>
 
 class xProxyService;
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "../common/base.hpp"
+#include <pp_common/base.hpp>
 
 struct xProxyAudit {
 	size_t AuthCacheSize = 0;
