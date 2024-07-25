@@ -9,6 +9,7 @@ include_directories(
 
 # local libs
 aux_source_directory("./pp_common" SRC)
+aux_source_directory("./pp_framework" SRC)
 add_library(${libname} ${SRC})
 
 install(

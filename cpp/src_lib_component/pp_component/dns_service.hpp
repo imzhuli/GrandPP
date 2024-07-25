@@ -1,6 +1,7 @@
 #pragma once
 #include <pp_common/base.hpp>
 #include <pp_common/job.hpp>
+#include <pp_common/proxy.hpp>
 #include <thread>
 #include <vector>
 

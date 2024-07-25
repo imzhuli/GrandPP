@@ -15,6 +15,7 @@ link_directories(
 	${X_LIBRARY_DIRS}
 )
 
+message(STATUS ${LIBRARY_OUTPUT_PATH})
 set(LOCAL_PP_LIBRARIES ppcommon ppprotocol)
 
 # enable specific macors by system type:
