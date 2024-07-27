@@ -37,7 +37,6 @@ void xPPDnsServiceLocal::Clean() {
 void xPPDnsServiceLocal::SubThreadLoop() {
 	auto R = (xPPDnsQuery *)nullptr;
 	while (true) {
-		std::this_thread::sleep_for(std::chrono::seconds(1));
 		RequestSemaphore.Wait([&R, this] { R = RequestQueue.Pop(); });
 		if (!R) {
 			break;
