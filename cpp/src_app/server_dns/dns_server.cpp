@@ -23,7 +23,7 @@ static bool IsLocal(const xNetAddress & Addr) {
 		if ((B0 & 0xFE) == 0xFC) {
 			return true;
 		}
-		if (B0 == 0xFE && (B1 & 0xC0 == 0x80)) {
+		if (B0 == 0xFE && (B1 & 0xC0) == 0x80) {
 			return true;
 		}
 	}

@@ -13,6 +13,7 @@ aux_source_directory("./pp_framework" SRC)
 aux_source_directory("./pp_network"   SRC)
 aux_source_directory("./pp_stub"      SRC)
 add_library(${libname} ${SRC})
+target_compile_definitions(${libname} PRIVATE X_OPTION_STATIC)
 
 install(
 	DIRECTORY ${PROJECT_SOURCE_DIR}/

@@ -12,8 +12,8 @@ xStaticIpTable LoadStaticIpTable(const char * Filename) {
 	auto Table = xStaticIpTable{};
 
 	std::string line;
-	while (std::getline(Infile, line)) {  // 逐行读取文件内容
-		std::cout << line << std::endl;   // 打印每一行内容
+	while (std::getline(Infile, line)) {
+		std::cout << line << std::endl;
 		auto Segs = Split(line, "|");
 		cout << Segs.size() << endl;
 		if (Segs.size() != 3) {

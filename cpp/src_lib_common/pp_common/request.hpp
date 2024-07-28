@@ -9,9 +9,10 @@ struct xAsyncRequest : xListNode {
 	enum eState {
 		NEW      = 0,
 		QUERYING = 1,
-		NO_DATA  = 2,
+		NODATA   = 2,
 		READY    = 3,
 	};
+
 	struct xDispatcher : xListNode {
 		eState                      State = NEW;
 		tDataNode                   DataNode;
@@ -71,7 +72,7 @@ public:
 				return true;
 			case xRequest::QUERYING:
 				return true;
-			case xRequest::NO_DATA:
+			case xRequest::NODATA:
 			case xRequest::READY:
 				X_DEBUG_PRINTF("Using Cached Data");
 				DispatcherList.GrabTail(RP->Dispatcher);
@@ -109,7 +110,7 @@ protected:
 		if (!RP) {
 			return;
 		}
-		RP->Dispatcher.State = xRequest::NO_DATA;
+		RP->Dispatcher.State = xRequest::NODATA;
 		Reset(RP->Dispatcher.DataNode);
 		DispatcherList.GrabTail(RP->Dispatcher);
 	}

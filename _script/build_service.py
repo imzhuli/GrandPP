@@ -49,10 +49,14 @@ if os.path.isdir(build_path):
     shutil.rmtree(build_path)
 os.makedirs(build_path)
 
-os.system(
-    'cmake -Wno-dev '
-    f'{xsetup.cmake_build_type} '
-    f'-DX_LIB={x_path!r} '
-    f'-DCMAKE_INSTALL_PREFIX={full_install_dir!r} -B {build_path!r} {src_dir!r}')
-os.system(f"cmake --build {build_path} {xsetup.cmake_build_config} -- {j_threads} all")
-os.system(f"cmake --install {build_path} {xsetup.cmake_build_config}")
+cm = 'cmake -Wno-dev ' \
+    f'{xsetup.cmake_build_type} ' \
+    f'-DX_LIB="{x_path}" ' \
+    f'-DCMAKE_INSTALL_PREFIX={full_install_dir!r} -B "{build_path}" "{src_dir}"'
+print(cm)
+os.system(cm)
+
+cmb = f'cmake --build "{build_path}" {xsetup.cmake_build_config} -- {j_threads}'
+print(cmb)
+os.system(cmb)
+os.system(f'cmake --install "{build_path}" {xsetup.cmake_build_config}')

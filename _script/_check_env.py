@@ -10,7 +10,6 @@ MIN_PY_VERSION_MINOR = 7
 cwd = os. getcwd()
 build_dir = cwd + "/_build"
 install_dir = cwd + "/_install"
-proto_dir = cwd + "/protobuf"
 cpp_dir = cwd + "/cpp"
 
 

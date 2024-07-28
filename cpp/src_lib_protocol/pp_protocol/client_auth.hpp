@@ -24,8 +24,8 @@ struct xProxyClientAuthResp : xBinaryMessage {
 		R(TerminalControllerAddress, TerminalId);
 		R(EnableUdp);
 	}
-	uint64_t    AuditKey;                   // 绑定的计量账号(不是计费)
-	uint64_t    CacheTimeout;               // 校验超时, 单位:毫秒, 一般用户采用默认值, 特别用户使用设置的较短值
+	uint64_t    AuditKey;                   //
+	uint64_t    CacheTimeout;               //
 	xNetAddress TerminalControllerAddress;  // relay server, or terminal service address
 	uint64_t    TerminalId;                 // index in relay server
 	bool        EnableUdp;
