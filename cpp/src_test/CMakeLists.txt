@@ -46,5 +46,6 @@ function(build_app sub_dir_name)
 	target_link_libraries(_${sub_dir_name} PRIVATE ${lib_dependency})
 endfunction()
 
+build_app(cpp)
 build_app(dns_local)
 

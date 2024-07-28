@@ -56,7 +56,6 @@ void xPPThreadContext::OnTimerWheelEvent(xel::xVariable Context, uint64_t Timest
 }
 
 void xPPThreadContext::OnCleanTimerWheelEvent(xel::xVariable Context, xel::xTimerWheelNode * Node) {
-	X_DEBUG_PRINTF("");
 	auto P = (xPPThreadContext *)(Context.P);
 	P->DelegatePool.Destroy(static_cast<xScheduleNode *>(Node));
 }

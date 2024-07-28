@@ -1,6 +1,5 @@
 #pragma once
 
-#include <atomic>
 #include <core/core_min.hpp>
 #include <core/memory_pool.hpp>
 #include <core/timer_wheel.hpp>
@@ -36,10 +35,6 @@ private:
 		bool               AutoRescheduleNext;
 		xPPCallback        UserCallback;
 		xel::xVariable     UserContext;
-
-		~xScheduleNode() {
-			X_DEBUG_PRINTF("%p", this);
-		}
 	};
 	using xPPDelegatePool = xel::xFixedObjectPool<xScheduleNode>;
 	X_MEMBER static void OnTimerWheelEvent(xel::xVariable Context, uint64_t TimestampMS);
