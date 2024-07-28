@@ -28,7 +28,7 @@ void xPPDnsServiceLocal::Clean() {
 	// clean unprocessed request
 	xel::RuntimeAssert(!RequestQueue.Pop());
 	while (auto R = ResultQueue.Pop()) {
-		X_DEBUG_PRINTF("Unprocessed dns result: %s", R->Hostname.c_str());
+		X_PERROR("Unprocessed dns result: %s", R->Hostname.c_str());
 		FreeResult(R);
 	}
 	X_DEBUG_RESET(ThreadContext);
@@ -42,8 +42,6 @@ void xPPDnsServiceLocal::SubThreadLoop() {
 			break;
 		}
 		{  // locally resolve dns:
-			X_DEBUG_PRINTF("GetRequest: %s", R->Hostname.c_str());
-
 			addrinfo   hints = {};
 			addrinfo * res   = {};
 			addrinfo * p     = {};
@@ -52,10 +50,9 @@ void xPPDnsServiceLocal::SubThreadLoop() {
 			hints.ai_family   = AF_UNSPEC;
 			hints.ai_socktype = SOCK_STREAM;
 
-			X_DEBUG_BREAKPOINT();
 			if (auto err = getaddrinfo(R->Hostname.c_str(), nullptr, &hints, &res)) {
 				xel::Touch(err);
-				X_DEBUG_PRINTF("getaddrinfo: %s\n", gai_strerror(err));
+				X_PERROR("getaddrinfo: %s\n", gai_strerror(err));
 			} else {
 				for (p = res; p != NULL; p = p->ai_next) {
 					if (p->ai_family == AF_INET) {  // IPv4
@@ -81,7 +78,6 @@ void xPPDnsServiceLocal::SubThreadLoop() {
 			ThreadContext->Interrupt();
 		}
 	}
-	X_DEBUG_PRINTF("ServiceThread exited");
 }
 
 bool xPPDnsServiceLocal::PostDnsRequest(xel::xVariable UserContext, std::string_view Hostname) {

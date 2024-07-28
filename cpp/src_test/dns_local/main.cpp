@@ -29,7 +29,7 @@ int main(int argc, char ** argv) {
 	auto MTC = PPGetMainThreadContext();
 	MTC->Schedule(Terminate, 3000);
 
-	SL.Init(10, MTC);
+	SL.Init(20, MTC);
 	MTC->ScheduleNext(ProcessDnsResult, true);
 
 	SL.PostDnsRequest({}, "www.qq.com");
