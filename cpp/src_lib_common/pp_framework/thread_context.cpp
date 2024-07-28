@@ -22,21 +22,10 @@ bool xPPThreadContext::Init() {
 	return true;
 }
 
-struct A {
-	bool Init() {
-		return true;
-	}
-	void Clean() {
-	}
-};
-
 void xPPThreadContext::Clean() {
 	auto ICG  = MakeResourceCleaner(IoContext);
 	auto CDPG = MakeResourceCleaner(DelegatePool);
 	auto TWG  = MakeResourceCleaner(TimerWheel);  // DelegateObject is simlpe and is safe not to call DelegatePool.Destroy()
-
-	A    a;
-	auto G = CleanResourceReversed(a);
 }
 
 void xPPThreadContext::Run() {

@@ -16,7 +16,7 @@ link_directories(
 )
 
 message(STATUS ${LIBRARY_OUTPUT_PATH})
-set(LOCAL_PP_LIBRARIES ppcommon ppprotocol)
+set(LOCAL_PP_LIBRARIES ppcomponent ppprotocol ppcommon)
 
 # enable specific macors by system type:
 if (CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -43,7 +43,6 @@ function(build_app sub_dir_name)
 	aux_source_directory(${sub_dir_name} LOCAL_SOURCE_CODE)
 	add_executable(_${sub_dir_name} ${LOCAL_SOURCE_CODE})
 	target_compile_definitions(_${sub_dir_name} PRIVATE X_OPTION_STATIC)
-	target_link_libraries(_${sub_dir_name} PRIVATE ppprotocol ppcomponent ppcommon)
 	target_link_libraries(_${sub_dir_name} PRIVATE ${lib_dependency})
 endfunction()
 
