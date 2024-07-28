@@ -6,26 +6,37 @@ bool xPPThreadContext::Init() {
 	}
 	auto ICG = MakeResourceCleaner(IoContext);
 
-	if (!TimerWheel.Init(DEFAULT_TIMERWHEEL_TOTAL, DEFAULT_TIMERWHEEL_GAP_MS)) {
-		return false;
-	}
-	auto TWG = MakeResourceCleaner(TimerWheel);
-
 	if (!DelegatePool.Init(DEFAULT_MAX_CALLBACK_DELEGATE)) {
 		return false;
 	}
 	auto CDPG = MakeResourceCleaner(DelegatePool);
 
+	if (!TimerWheel.Init(DEFAULT_TIMERWHEEL_TOTAL, DEFAULT_TIMERWHEEL_GAP_MS)) {
+		return false;
+	}
+	auto TWG = MakeResourceCleaner(TimerWheel);
+
 	ICG.Dismiss();
-	TWG.Dismiss();
 	CDPG.Dismiss();
+	TWG.Dismiss();
 	return true;
 }
 
+struct A {
+	bool Init() {
+		return true;
+	}
+	void Clean() {
+	}
+};
+
 void xPPThreadContext::Clean() {
 	auto ICG  = MakeResourceCleaner(IoContext);
-	auto TWG  = MakeResourceCleaner(TimerWheel);
 	auto CDPG = MakeResourceCleaner(DelegatePool);
+	auto TWG  = MakeResourceCleaner(TimerWheel);  // DelegateObject is simlpe and is safe not to call DelegatePool.Destroy()
+
+	A    a;
+	auto G = CleanResourceReversed(a);
 }
 
 void xPPThreadContext::Run() {
@@ -45,16 +56,23 @@ void xPPThreadContext::Interrupt() {
 	IoContext.Interrupt();
 }
 
-void xPPThreadContext::OnTimerWheelEvent(xel::xVariable TNContext, uint64_t TimestampMS) {
-	auto P = (xScheduleNode *)TNContext.P;
+void xPPThreadContext::OnTimerWheelEvent(xel::xVariable Context, uint64_t TimestampMS) {
+	auto P = (xScheduleNode *)Context.P;
+	P->UserCallback.Execute(TimestampMS);
 	if (P->AutoRescheduleNext) {
-
+		P->ThreadContext->TimerWheel.ScheduleNext(*P);
 	} else {
 		P->ThreadContext->DelegatePool.Destroy(P);
 	}
 }
 
-bool xPPThreadContext::ScheduleNext(xPPCallback Callback, xel::xVariable Context, bool AutoRescheduleNext) {
+void xPPThreadContext::OnCleanTimerWheelEvent(xel::xVariable Context, xel::xTimerWheelNode * Node) {
+	X_DEBUG_PRINTF("");
+	auto P = (xPPThreadContext *)(Context.P);
+	P->DelegatePool.Destroy(static_cast<xScheduleNode *>(Node));
+}
+
+bool xPPThreadContext::ScheduleNext(xPPCallback Callback, bool AutoRescheduleNext) {
 	auto N = DelegatePool.Create();
 	if (!N) {
 		return false;
@@ -62,21 +80,31 @@ bool xPPThreadContext::ScheduleNext(xPPCallback Callback, xel::xVariable Context
 	N->ThreadContext      = this;
 	N->AutoRescheduleNext = AutoRescheduleNext;
 	N->UserCallback       = Callback;
-	N->UserContext        = Context;
-	SetCallback(*N, { OnTimerWheelEvent, { .P = this } });
+	SetCallback(*N, { OnTimerWheelEvent, { .P = N } });
 	TimerWheel.ScheduleNext(*N);
 	return true;
 }
 
-bool xPPThreadContext::ScheduleImmediate(xPPCallback Callback, xel::xVariable Context) {
-	return false;
+bool xPPThreadContext::ScheduleImmediate(xPPCallback Callback) {
+	auto N = DelegatePool.CreateValue();
+	if (!N) {
+		return false;
+	}
+	N->ThreadContext = this;
+	N->UserCallback  = Callback;
+	SetCallback(*N, { OnTimerWheelEvent, { .P = N } });
+	TimerWheel.ScheduleByOffset(*N, 0);
+	return true;
 }
 
-bool xPPThreadContext::Schedule(xPPCallback Callback, xel::xVariable Context, uint64_t TimeoutMS) {
-	// TODO:
-	// 1. Create Callback Object
-
-	// 2. do schedule
-
-	return false;
+bool xPPThreadContext::Schedule(xPPCallback Callback, uint64_t TimeoutMS) {
+	auto N = DelegatePool.CreateValue();
+	if (!N) {
+		return false;
+	}
+	N->ThreadContext = this;
+	N->UserCallback  = Callback;
+	SetCallback(*N, { OnTimerWheelEvent, { .P = N } });
+	TimerWheel.ScheduleByTimeoutMS(*N, TimeoutMS);
+	return true;
 }

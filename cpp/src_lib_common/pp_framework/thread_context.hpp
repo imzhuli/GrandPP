@@ -26,9 +26,9 @@ public:
 		return &IoContext;
 	}
 
-	X_MEMBER bool ScheduleNext(xPPCallback Callback, xel::xVariable Context, bool AutoRescheduleNext = false);
-	X_MEMBER bool ScheduleImmediate(xPPCallback Callback, xel::xVariable Context);
-	X_MEMBER bool Schedule(xPPCallback Callback, xel::xVariable Context, uint64_t TimeoutMS);
+	X_MEMBER bool ScheduleNext(xPPCallback Callback, bool AutoRescheduleNext = false);
+	X_MEMBER bool ScheduleImmediate(xPPCallback Callback);
+	X_MEMBER bool Schedule(xPPCallback Callback, uint64_t TimeoutMS);
 
 private:
 	struct xScheduleNode : xel::xTimerWheelNode {
@@ -36,9 +36,14 @@ private:
 		bool               AutoRescheduleNext;
 		xPPCallback        UserCallback;
 		xel::xVariable     UserContext;
+
+		~xScheduleNode() {
+			X_DEBUG_PRINTF("%p", this);
+		}
 	};
 	using xPPDelegatePool = xel::xFixedObjectPool<xScheduleNode>;
-	X_MEMBER static void OnTimerWheelEvent(xel::xVariable TNContext, uint64_t TimestampMS);
+	X_MEMBER static void OnTimerWheelEvent(xel::xVariable Context, uint64_t TimestampMS);
+	X_MEMBER static void OnCleanTimerWheelEvent(xel::xVariable Context, xel::xTimerWheelNode * Node);
 
 private:
 	xel::xIoContext  IoContext;

@@ -28,6 +28,14 @@ void PPClean() {
 	PPInited = false;
 }
 
+void PPMainLoop() {
+	MainThreadContext.Run();
+}
+
+void PPStopMainLoop() {
+	MainThreadContext.Stop();
+}
+
 xPPThreadContext * PPGetMainThreadContext() {
 	return &MainThreadContext;
 }
