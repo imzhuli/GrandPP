@@ -12,6 +12,8 @@ int main(int argc, char ** argv) {
 	SL.Init(1);
 
 	SL.PostDnsRequest({}, "www.qq.com");
+	SL.PostDnsRequest({}, "www.baidu.com");
+	SL.PostDnsRequest({}, "www.netease.com");
 	for (int i = 0; i < 3; ++i) {
 		this_thread::sleep_for(chrono::seconds(1));
 		auto Iter = SL.GetResultIterator();

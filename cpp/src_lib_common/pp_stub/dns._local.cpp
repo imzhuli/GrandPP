@@ -42,7 +42,6 @@ void xPPDnsServiceLocal::SubThreadLoop() {
 			break;
 		}
 		{  // locally resolve dns:
-			// TODO
 			X_DEBUG_PRINTF("GetRequest: %s", R->Hostname.c_str());
 
 			addrinfo   hints = {};

@@ -45,6 +45,33 @@ void xPPThreadContext::Interrupt() {
 	IoContext.Interrupt();
 }
 
+void xPPThreadContext::OnTimerWheelEvent(xel::xVariable TNContext, uint64_t TimestampMS) {
+	auto P = (xScheduleNode *)TNContext.P;
+	if (P->AutoRescheduleNext) {
+
+	} else {
+		P->ThreadContext->DelegatePool.Destroy(P);
+	}
+}
+
+bool xPPThreadContext::ScheduleNext(xPPCallback Callback, xel::xVariable Context, bool AutoRescheduleNext) {
+	auto N = DelegatePool.Create();
+	if (!N) {
+		return false;
+	}
+	N->ThreadContext      = this;
+	N->AutoRescheduleNext = AutoRescheduleNext;
+	N->UserCallback       = Callback;
+	N->UserContext        = Context;
+	SetCallback(*N, { OnTimerWheelEvent, { .P = this } });
+	TimerWheel.ScheduleNext(*N);
+	return true;
+}
+
+bool xPPThreadContext::ScheduleImmediate(xPPCallback Callback, xel::xVariable Context) {
+	return false;
+}
+
 bool xPPThreadContext::Schedule(xPPCallback Callback, xel::xVariable Context, uint64_t TimeoutMS) {
 	// TODO:
 	// 1. Create Callback Object

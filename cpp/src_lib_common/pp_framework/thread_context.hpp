@@ -8,7 +8,6 @@
 
 using xPPCallback     = xel::xTimerWheelCallback;
 using xPPCallbackNode = xel::xTimerWheelNode;
-using xPPDelegatePool = xel::xFixedObjectPool<xPPCallbackNode>;
 
 class xPPThreadContext {
 public:
@@ -27,7 +26,19 @@ public:
 		return &IoContext;
 	}
 
+	X_MEMBER bool ScheduleNext(xPPCallback Callback, xel::xVariable Context, bool AutoRescheduleNext = false);
+	X_MEMBER bool ScheduleImmediate(xPPCallback Callback, xel::xVariable Context);
 	X_MEMBER bool Schedule(xPPCallback Callback, xel::xVariable Context, uint64_t TimeoutMS);
+
+private:
+	struct xScheduleNode : xel::xTimerWheelNode {
+		xPPThreadContext * ThreadContext;
+		bool               AutoRescheduleNext;
+		xPPCallback        UserCallback;
+		xel::xVariable     UserContext;
+	};
+	using xPPDelegatePool = xel::xFixedObjectPool<xScheduleNode>;
+	X_MEMBER static void OnTimerWheelEvent(xel::xVariable TNContext, uint64_t TimestampMS);
 
 private:
 	xel::xIoContext  IoContext;
