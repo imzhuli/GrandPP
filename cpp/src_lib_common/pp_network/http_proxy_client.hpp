@@ -7,6 +7,8 @@
 
 struct xPPHttpProxyOptions {
 	xPPThreadContext * ThreadContext;
+	std::string_view   ProxyServerHostView;
+	std::string_view   TargetHostView;
 	std::string_view   UserView;
 	std::string_view   PassView;
 };
