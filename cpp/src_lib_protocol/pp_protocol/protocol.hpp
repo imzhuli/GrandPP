@@ -28,8 +28,16 @@ static constexpr const xPacketCommandId Cmd_CloseUdpAssociation      = CmdNDBase
 static constexpr const xPacketCommandId Cmd_PostProxyToRelayUdpData  = CmdNDBase + 0x09;
 static constexpr const xPacketCommandId Cmd_PostRelayToProxyUdpData  = CmdNDBase + 0x0A;
 
+// audit & report
+static constexpr const xPacketCommandId Cmd_PostError            = CmdNDBase + 0x0100;
+static constexpr const xPacketCommandId Cmd_PostTerminalAudit    = CmdNDBase + 0x0101;
+static constexpr const xPacketCommandId Cmd_PostRelayServerAudit = CmdNDBase + 0x0102;
+
 // udp control request
 static constexpr const xPacketCommandId Cmd_ControlRequest = 0x03'000;
+
+// backend base:
+static constexpr const xPacketCommandId CmdBKBase = 0x04'000;
 
 std::vector<ubyte> Encrypt(const void * Data, size_t DataSize, const std::string & AesKey);
 std::vector<ubyte> Decrypt(const void * Data, size_t DataSize, const std::string & AesKey);

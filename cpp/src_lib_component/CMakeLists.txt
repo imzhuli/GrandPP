@@ -4,6 +4,7 @@ project (lib_${libname})
 
 include_directories(
 	../src_lib_common/
+	../src_lib_protocol/
 	${LOCAL_3RD_INCLUDE_DIR}
 	${X_INCLUDE_DIRS}
 )

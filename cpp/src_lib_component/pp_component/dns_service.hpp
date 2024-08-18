@@ -5,6 +5,11 @@
 #include <thread>
 #include <vector>
 
+struct xDnsResult {
+	xNetAddress A4;
+	xNetAddress A6;
+};
+
 struct xDnsJob : xJobNode {
 	xVariable   JobCtx = {};
 	std::string Hostname;
@@ -13,6 +18,8 @@ struct xDnsJob : xJobNode {
 };
 
 using xDnsResultCallback = void(xVariable CallbackContext, xVariable RequestContext, const xNetAddress & A4, const xNetAddress & A6);
+
+xDnsResult DnsQuery(const std::string & Hostname);
 
 // {
 // 	X_DEBUG_PRINTF("%" PRIx64 ": ipv4=%s, ipv6=%s", Ctx.U64, A4.IpToString().c_str(), A6.IpToString().c_str());

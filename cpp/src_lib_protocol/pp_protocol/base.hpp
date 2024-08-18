@@ -1,5 +1,6 @@
 #pragma once
 #include <pp_common/base.hpp>
+#include <pp_common/error.hpp>
 
 class xGroupedMessage : public xBinaryMessage {
 public:

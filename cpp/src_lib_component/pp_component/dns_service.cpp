@@ -68,38 +68,44 @@ void xDnsService::DeleteDnsJob(const xDnsJob * PJ) {
 	--TotalDnsJob;
 }
 
+xDnsResult DnsQuery(const std::string & Hostname) {
+
+	addrinfo   hints = {};
+	addrinfo * res   = {};
+	addrinfo * p     = {};
+
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family   = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+
+	auto Result = xDnsResult();
+	if (auto err = getaddrinfo(Hostname.c_str(), nullptr, &hints, &res)) {
+		Touch(err);
+		X_DEBUG_PRINTF("getaddrinfo: %s\n", gai_strerror(err));
+	} else {
+		for (p = res; p != NULL; p = p->ai_next) {
+			if (p->ai_family == AF_INET) {  // IPv4
+				if (Result.A4) {
+					continue;
+				}
+				Result.A4 = xNetAddress::Parse((sockaddr_in *)p->ai_addr);
+			} else if (p->ai_family == AF_INET6) {
+				if (Result.A6) {
+					continue;
+				}
+				Result.A6 = xNetAddress::Parse((sockaddr_in6 *)p->ai_addr);
+			}
+		}
+		freeaddrinfo(res);
+	}
+	return Result;
+}
+
 void xDnsService::WorkerThreadFunc() {
 	while (auto PJ = (xDnsJob *)NewDnsJobQueue.WaitForJob()) {
-
-		addrinfo   hints = {};
-		addrinfo * res   = {};
-		addrinfo * p     = {};
-
-		memset(&hints, 0, sizeof(hints));
-		hints.ai_family   = AF_UNSPEC;
-		hints.ai_socktype = SOCK_STREAM;
-
-		X_DEBUG_BREAKPOINT();
-		if (auto err = getaddrinfo(PJ->Hostname.c_str(), nullptr, &hints, &res)) {
-			Touch(err);
-			X_DEBUG_PRINTF("getaddrinfo: %s\n", gai_strerror(err));
-		} else {
-			for (p = res; p != NULL; p = p->ai_next) {
-				if (p->ai_family == AF_INET) {  // IPv4
-					if (PJ->A4) {
-						continue;
-					}
-					PJ->A4 = xNetAddress::Parse((sockaddr_in *)p->ai_addr);
-				} else if (p->ai_family == AF_INET6) {
-					if (PJ->A6) {
-						continue;
-					}
-					PJ->A6 = xNetAddress::Parse((sockaddr_in6 *)p->ai_addr);
-				}
-			}
-			freeaddrinfo(res);
-		}
-
+		auto Result = DnsQuery(PJ->Hostname);
+		PJ->A4      = Result.A4;
+		PJ->A6      = Result.A6;
 		// finished:
 		do {
 			auto G = xSpinlockGuard(FinishedDnsJobListLock);

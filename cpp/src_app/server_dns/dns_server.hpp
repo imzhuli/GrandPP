@@ -10,11 +10,6 @@ struct xDnsRequest : xDnsRequestSource {
 	std::string Hostname;
 };
 
-struct xDnsResult {
-	xNetAddress A4;
-	xNetAddress A6;
-};
-
 using xDnsRequestManager = xAsyncRequestManager<xDnsRequestSource, xDnsResult>;
 
 class xDnsServer
