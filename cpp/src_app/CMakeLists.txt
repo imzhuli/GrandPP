@@ -50,6 +50,7 @@ set(target_list
 	config_service
 	error_service
 	server_dns
+	server_state
 	)
 
 foreach(item IN LISTS target_list)
