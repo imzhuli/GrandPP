@@ -63,3 +63,18 @@ static inline std::string DebugSign(const std::string_view& V) {
 using xAccountId = uint64_t;
 using xServerId  = uint32_t;
 using xGroupId   = uint32_t;
+
+enum struct eServerType : uint8_t {
+	UNSPEC                   = 0,
+	ACCESS                   = 1,
+	RELAY                    = 2,
+	TERMINAL                 = 3,
+	STATIC_RELAY_TERMINAL    = 10,
+	DELEGATE_RELAY_TERMINAL  = 20,  // support 3rd party
+	ACCESS_DELEGATE_TERMINAL = 30,
+	AUDIT_DISPATCHER         = 40,
+	AUDIT_SERVER             = 41,
+	CONFIG_CENTER            = 100,
+	DNS_DISPATCHER           = 110,
+	DNS_SERVER               = 111,
+};

@@ -41,15 +41,23 @@ set(lib_dependency
 # applications
 function(build_app sub_dir_name)
 	aux_source_directory(${sub_dir_name} LOCAL_SOURCE_CODE)
-	add_executable(_${sub_dir_name} ${LOCAL_SOURCE_CODE})
-	target_compile_definitions(_${sub_dir_name} PRIVATE X_OPTION_STATIC)
-	target_link_libraries(_${sub_dir_name} PRIVATE ${lib_dependency})
+	add_executable(${sub_dir_name} ${LOCAL_SOURCE_CODE})
+	target_compile_definitions(${sub_dir_name} PRIVATE X_OPTION_STATIC)
+	target_link_libraries(${sub_dir_name} PRIVATE ${lib_dependency})
 endfunction()
 
-build_app(server_dns)
+set(target_list
+	config_service
+	error_service
+	server_dns
+	)
+
+foreach(item IN LISTS target_list)
+    build_app(${item})
+endforeach()
 
 install(TARGETS
-	_server_dns
+	${target_list}
 
 	RUNTIME DESTINATION bin
 	ARCHIVE DESTINATION lib
