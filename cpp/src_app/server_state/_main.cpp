@@ -15,7 +15,7 @@ struct CPUStats {
 	unsigned long long user, nice, system, idle, iowait, irq, softirq, steal;
 };
 
-CPUStats getCPUStats() {
+static CPUStats getCPUStats() {
 	ifstream statFile("/proc/stat");
 	string   line;
 	CPUStats stats = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -63,48 +63,81 @@ int main() {
 }
 
 #elif defined(X_SYSTEM_DARWIN)
-
+#include <mach/mach.h>
 #include <sys/sysctl.h>
 #include <sys/types.h>
 
-#include <chrono>
 #include <iostream>
 #include <thread>
+using namespace std;
 
-struct CPUStats {
-	uint64_t userTime;
-	uint64_t systemTime;
-	uint64_t idleTime;
-	uint64_t niceTime;
-};
+#define CP_USER   0
+#define CP_SYS    1
+#define CP_IDLE   2
+#define CP_NICE   3
+#define CP_STATES 4
 
-CPUStats getCPUStats() {
-	CPUStats stats = { 0, 0, 0, 0 };
-	size_t   size  = sizeof(stats.userTime);
-	sysctlbyname("kern.cp_time", &stats, &size, NULL, 0);
-	return stats;
+enum BYTE_UNITS { BYTES = 0, KILOBYTES = 1, MEGABYTES = 2, GIGABYTES = 3 };
+
+template <class T>
+static inline T convert_unit(T num, int to, int from = BYTES) {
+	for (; from < to; from++) {
+		num /= 1024;
+	}
+	return num;
 }
 
-double calculateCPUUsage(const CPUStats & prev, const CPUStats & curr) {
-	uint64_t prevTotal = prev.userTime + prev.systemTime + prev.idleTime + prev.niceTime;
-	uint64_t currTotal = curr.userTime + curr.systemTime + curr.idleTime + curr.niceTime;
+static host_cpu_load_info_data_t _get_cpu_percentage() {
+	kern_return_t             error;
+	mach_msg_type_number_t    count;
+	host_cpu_load_info_data_t r_load;
+	mach_port_t               mach_port;
 
-	uint64_t totalDiff = currTotal - prevTotal;
-	uint64_t idleDiff  = curr.idleTime - prev.idleTime;
+	count     = HOST_CPU_LOAD_INFO_COUNT;
+	mach_port = mach_host_self();
+	error     = host_statistics(mach_port, HOST_CPU_LOAD_INFO, (host_info_t)&r_load, &count);
 
-	return (double)(totalDiff - idleDiff) / totalDiff * 100.0;
+	if (error != KERN_SUCCESS) {
+		return host_cpu_load_info_data_t();
+	}
+
+	return r_load;
+}
+
+void getCpuUsePercentage() {
+	host_cpu_load_info_data_t load1 = _get_cpu_percentage();
+
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+
+	host_cpu_load_info_data_t load2 = _get_cpu_percentage();
+
+	// pre load times
+	unsigned long long current_user   = load1.cpu_ticks[CP_USER];
+	unsigned long long current_system = load1.cpu_ticks[CP_SYS];
+	unsigned long long current_nice   = load1.cpu_ticks[CP_NICE];
+	unsigned long long current_idle   = load1.cpu_ticks[CP_IDLE];
+
+	// Current load times
+	unsigned long long next_user   = load2.cpu_ticks[CP_USER];
+	unsigned long long next_system = load2.cpu_ticks[CP_SYS];
+	unsigned long long next_nice   = load2.cpu_ticks[CP_NICE];
+	unsigned long long next_idle   = load2.cpu_ticks[CP_IDLE];
+
+	// Difference between the two
+	unsigned long long diff_user   = next_user - current_user;
+	unsigned long long diff_system = next_system - current_system;
+	unsigned long long diff_nice   = next_nice - current_nice;
+	unsigned long long diff_idle   = next_idle - current_idle;
+
+	float value = static_cast<float>(diff_user + diff_system + diff_nice) / static_cast<float>(diff_user + diff_system + diff_nice + diff_idle) * 100.0;
+
+	cout << value << endl;
 }
 
 int main() {
-	while (true) {
-		CPUStats prevStats = getCPUStats();
-		std::this_thread::sleep_for(std::chrono::minutes(1));
-		CPUStats currStats = getCPUStats();
-
-		double cpuUsage = calculateCPUUsage(prevStats, currStats);
-		std::cout << "CPU Usage: " << cpuUsage << "%" << std::endl;
+	while (1) {
+		getCpuUsePercentage();
 	}
-
 	return 0;
 }
 
