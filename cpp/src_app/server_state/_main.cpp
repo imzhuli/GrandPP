@@ -31,6 +31,8 @@ CPUStats getCPUStats() {
 		string        cpu;
 		ss >> cpu >> stats.user >> stats.nice >> stats.system >> stats.idle >> stats.iowait >> stats.irq >> stats.softirq >> stats.steal;
 		statFile.close();
+	} else {
+		cerr << "feiled to open stat file" << endl;
 	}
 
 	return stats;
@@ -55,7 +57,7 @@ double calculateCPUUsage(const CPUStats & prev, const CPUStats & curr) {
 int main() {
 	while (true) {
 		CPUStats prevStats = getCPUStats();
-		this_thread::sleep_for(chrono::minutes(1));
+		this_thread::sleep_for(chrono::seconds(1));
 		CPUStats currStats = getCPUStats();
 
 		double cpuUsage = calculateCPUUsage(prevStats, currStats);
