@@ -10,6 +10,11 @@ include_directories(
 
 # local libs
 aux_source_directory("./pp_protocol"   SRC)
+aux_source_directory("./pp_protocol/audit_terminal"   SRC)
+aux_source_directory("./pp_protocol/config_server"    SRC)
+aux_source_directory("./pp_protocol/relay_terminal"   SRC)
+aux_source_directory("./pp_protocol/geo_server"       SRC)
+
 add_library(${libname} ${SRC})
 target_compile_definitions(${libname} PRIVATE X_OPTION_STATIC)
 

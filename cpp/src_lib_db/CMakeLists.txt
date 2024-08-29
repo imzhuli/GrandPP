@@ -1,22 +1,21 @@
 cmake_minimum_required(VERSION 3.14)
-project (pp_apps)
+project (pp2db_apps)
+set(libname pp2db)
+
+message(STATUS ${X_INCLUDE_DIRS})
+message(STATUS ${X_LIBRARY_DIRS})
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" )
+find_package(MySQL REQUIRED)
 
 include_directories(
-	../src_lib_common/
-	../src_lib_component/
-	../src_lib_protocol/
-	${LOCAL_3RD_INCLUDE_DIR}
+	${MYSQL_INCLUDE_DIR}
 	${X_INCLUDE_DIRS}
 )
 
 link_directories(
-	${LIBRARY_OUTPUT_PATH}
-	${LOCAL_3RD_LIBRARY_DIR}
 	${X_LIBRARY_DIRS}
 )
-
-message(STATUS ${LIBRARY_OUTPUT_PATH})
-set(LOCAL_PP_LIBRARIES ppcomponent ppprotocol ppcommon)
 
 # enable specific macors by system type:
 if (CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -32,37 +31,35 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 endif()
 
 set(lib_dependency
-	${LOCAL_PP_LIBRARIES}
-	${LOCAL_3RD_LIBRARIES}
+	${MYSQL_LIBRARIES}
 	${X_LIBRARIES}
 	${PLATFORM_LIBRARIES}
 	${cpp})
 
-# applications
+aux_source_directory(./ COMMON_SRC)
+
+add_library(${libname} ${COMMON_SRC})
+target_compile_definitions(${libname} PRIVATE X_OPTION_STATIC)
+
 function(build_app sub_dir_name)
 	aux_source_directory(${sub_dir_name} LOCAL_SOURCE_CODE)
-	add_executable(${sub_dir_name} ${LOCAL_SOURCE_CODE})
-	target_compile_definitions(${sub_dir_name} PRIVATE X_OPTION_STATIC)
-	target_link_libraries(${sub_dir_name} PRIVATE ${lib_dependency})
+	add_executable(_${sub_dir_name} ${LOCAL_SOURCE_CODE})
+	target_compile_definitions(_${sub_dir_name} PRIVATE X_OPTION_STATIC)
+	target_link_libraries(_${sub_dir_name} PRIVATE ${libname} ${lib_dependency})
 endfunction()
 
-set(target_list
-	server_config
-	server_error
-	server_dns
-	server_state
-	server_relay_terminal
+install(
+	DIRECTORY ${PROJECT_SOURCE_DIR}/_include/
+	DESTINATION include
+	FILES_MATCHING
+		PATTERN "*.h"
+		PATTERN "*.hpp"
 	)
 
-foreach(item IN LISTS target_list)
-    build_app(${item})
-endforeach()
-
 install(TARGETS
-	${target_list}
-
+	${libname}
 	RUNTIME DESTINATION bin
 	ARCHIVE DESTINATION lib
 	LIBRARY DESTINATION lib
-)
+	)
 

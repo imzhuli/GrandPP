@@ -35,11 +35,22 @@ static constexpr const xPacketCommandId Cmd_PostErrorResp        = Cmd_Managemen
 static constexpr const xPacketCommandId Cmd_PostTerminalAudit    = Cmd_ManagementBase + 0x03;
 static constexpr const xPacketCommandId Cmd_PostRelayServerAudit = Cmd_ManagementBase + 0x04;
 
-// udp control request
-static constexpr const xPacketCommandId Cmd_ControlRequest = 0x03'000;
+// version 2024 from here
+// version 2024 from here
+// version 2024 from here
+// version 2024 from here
+// version 2024 from here
+// version 2024 from here
+// version 2024 from here
 
 // backend base:
 static constexpr const xPacketCommandId CmdBKBase = 0x04'000;
+
+// terminal-relay:
+static constexpr const xPacketCommandId Cmd_TerminalRelayBase       = 0x05'000;
+static constexpr const xPacketCommandId Cmd_TerminalChallangeConfig = Cmd_TerminalRelayBase + 0x01;  // get config, including change version
+static constexpr const xPacketCommandId Cmd_TerminalCheckIn         = Cmd_TerminalRelayBase + 0x02;  // ask relay server to accept terminal
+static constexpr const xPacketCommandId Cmd_TerminalInitDataStream  = Cmd_TerminalRelayBase + 0x03;  // init data stream
 
 std::vector<ubyte> Encrypt(const void * Data, size_t DataSize, const std::string & AesKey);
 std::vector<ubyte> Decrypt(const void * Data, size_t DataSize, const std::string & AesKey);

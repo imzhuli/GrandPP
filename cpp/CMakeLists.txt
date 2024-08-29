@@ -125,6 +125,7 @@ set(LOCAL_3RD_CMAKE_DIR    "${LOCAL_3RD_LIBRARY_DIR}/cmake")
 
 add_subdirectory(src_lib_common)
 add_subdirectory(src_lib_component)
+add_subdirectory(src_lib_db)
 add_subdirectory(src_lib_protocol)
 add_subdirectory(src_test)
 add_subdirectory(src_app)
