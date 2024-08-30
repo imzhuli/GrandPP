@@ -46,8 +46,13 @@ static constexpr const xPacketCommandId Cmd_PostRelayServerAudit = Cmd_Managemen
 // backend base:
 static constexpr const xPacketCommandId CmdBKBase = 0x04'000;
 
+// server management:
+static constexpr const xPacketCommandId Cmd_ServerManagementBase  = 0x05'000;
+static constexpr const xPacketCommandId Cmd_QueryRunningState     = Cmd_ServerManagementBase + 1;
+static constexpr const xPacketCommandId Cmd_QueryRunningStateResp = Cmd_ServerManagementBase + 2;
+
 // terminal-relay:
-static constexpr const xPacketCommandId Cmd_TerminalRelayBase       = 0x05'000;
+static constexpr const xPacketCommandId Cmd_TerminalRelayBase       = 0x06'000;
 static constexpr const xPacketCommandId Cmd_TerminalChallangeConfig = Cmd_TerminalRelayBase + 0x01;  // get config, including change version
 static constexpr const xPacketCommandId Cmd_TerminalCheckIn         = Cmd_TerminalRelayBase + 0x02;  // ask relay server to accept terminal
 static constexpr const xPacketCommandId Cmd_TerminalInitDataStream  = Cmd_TerminalRelayBase + 0x03;  // init data stream

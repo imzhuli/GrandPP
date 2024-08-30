@@ -4,6 +4,7 @@ project (pp_apps)
 include_directories(
 	../src_lib_common/
 	../src_lib_component/
+	../src_lib_db/
 	../src_lib_protocol/
 	${LOCAL_3RD_INCLUDE_DIR}
 	${X_INCLUDE_DIRS}
@@ -16,7 +17,7 @@ link_directories(
 )
 
 message(STATUS ${LIBRARY_OUTPUT_PATH})
-set(LOCAL_PP_LIBRARIES ppcomponent ppprotocol ppcommon)
+set(LOCAL_PP_LIBRARIES ppcomponent ppprotocol ppdb ppcommon)
 
 # enable specific macors by system type:
 if (CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -47,7 +48,7 @@ function(build_app sub_dir_name)
 endfunction()
 
 set(target_list
-	server_config
+	server_config_center
 	server_error
 	server_dns
 	server_state

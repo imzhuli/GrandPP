@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
-project (pp2db_apps)
-set(libname pp2db)
+set(libname ppdb)
+project (lib_${libname})
 
 message(STATUS ${X_INCLUDE_DIRS})
 message(STATUS ${X_LIBRARY_DIRS})

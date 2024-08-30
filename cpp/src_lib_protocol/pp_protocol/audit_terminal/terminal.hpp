@@ -8,7 +8,7 @@ struct xTerminalAudit : xBinaryMessage {
 	}
 
 	virtual void DeserializeMembers() override {
-		W(TerminalId, TerminalVersion, StartTimestampMS, OfflineTimestampMS, RelayServerId, TotalConnections, TotalUploadSize, TotalDownloadSize);
+		R(TerminalId, TerminalVersion, StartTimestampMS, OfflineTimestampMS, RelayServerId, TotalConnections, TotalUploadSize, TotalDownloadSize);
 	}
 
 	std::string TerminalId;  // terminal device id,  length <= 96
