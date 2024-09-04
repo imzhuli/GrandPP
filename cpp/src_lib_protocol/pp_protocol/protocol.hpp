@@ -44,7 +44,15 @@ static constexpr const xPacketCommandId Cmd_PostRelayServerAudit = Cmd_Managemen
 // version 2024 from here
 
 // backend base:
-static constexpr const xPacketCommandId CmdBKBase = 0x04'000;
+static constexpr const xPacketCommandId Cmd_BackendBase             = 0x04'000;
+static constexpr const xPacketCommandId Cmd_AuditTerminalInfo       = Cmd_BackendBase + 0x01;
+static constexpr const xPacketCommandId Cmd_AuditTerminalInfoResp   = Cmd_BackendBase + 0x02;  // 一般不处理返回
+static constexpr const xPacketCommandId Cmd_AuditUsageByAuditId     = Cmd_BackendBase + 0x03;
+static constexpr const xPacketCommandId Cmd_AuditUsageByAuditIdResp = Cmd_BackendBase + 0x04;  // 一般不处理返回
+static constexpr const xPacketCommandId Cmd_BackendChallenge        = Cmd_BackendBase + 0x101;
+static constexpr const xPacketCommandId Cmd_BackendChallengeResp    = Cmd_BackendBase + 0x102;
+static constexpr const xPacketCommandId Cmd_AuthByUserPass          = Cmd_BackendBase + 0x201;
+static constexpr const xPacketCommandId Cmd_AuthByUserPassResp      = Cmd_BackendBase + 0x202;
 
 // server management:
 static constexpr const xPacketCommandId Cmd_ServerManagementBase  = 0x05'000;

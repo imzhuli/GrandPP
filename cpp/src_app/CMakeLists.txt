@@ -48,6 +48,7 @@ function(build_app sub_dir_name)
 endfunction()
 
 set(target_list
+	server_audit_colloector
 	server_config_center
 	server_error
 	server_dns

@@ -12,7 +12,9 @@ include_directories(
 aux_source_directory("./pp_protocol"                  SRC)
 aux_source_directory("./pp_protocol/app_status"       SRC)
 aux_source_directory("./pp_protocol/audit_terminal"   SRC)
+aux_source_directory("./pp_protocol/backend"          SRC)
 aux_source_directory("./pp_protocol/config_center"    SRC)
+aux_source_directory("./pp_protocol/common"           SRC)
 aux_source_directory("./pp_protocol/relay_terminal"   SRC)
 aux_source_directory("./pp_protocol/geo_server"       SRC)
 
