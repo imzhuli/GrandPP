@@ -53,6 +53,7 @@ set(target_list
 	server_error
 	server_dns
 	server_state
+	server_relay_third
 	server_relay_terminal
 	)
 

@@ -68,6 +68,7 @@ void xAuditReportConnection::OnConnected(xTcpConnection * TcpConnectionPtr) {
 	Connection.PostData(Buffer, RSize);
 
 	X_DEBUG_PRINTF("Sending:\n%s", HexShow(Buffer, RSize).c_str());
+	X_DEBUG_PRINTF("Header: %s", StrToHex(Buffer, PacketHeaderSize).c_str());
 	X_DEBUG_PRINTF("Body: %s", StrToHex(Buffer + PacketHeaderSize, RSize - PacketHeaderSize).c_str());
 	State = eState::Challenging;
 }

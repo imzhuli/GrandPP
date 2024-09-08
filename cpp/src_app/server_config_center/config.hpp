@@ -2,7 +2,9 @@
 #include <pp_common/base.hpp>
 #include <string>
 
-struct xConfig {
+struct xGlobaConfig : public xel::xConfigLoader {
+
+	void Load(const char * filename);
 
 	xel::xNetAddress BindAddress;
 	std::string      TerminalKey;
@@ -13,4 +15,7 @@ struct xConfig {
 	std::string Mysql_Schema;
 
 	//
+	uint64_t LastUpdateTimestampMS = xel::GetTimestampMS();
 };
+
+extern xGlobaConfig GlobalConfig;
