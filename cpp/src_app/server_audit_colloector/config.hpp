@@ -9,3 +9,5 @@ struct xAuditControllerConfig : public xConfigLoader {
 	std::string TestAppKey;
 	std::string TestAppSecret;
 };
+
+extern xAuditControllerConfig GlobalConfig;

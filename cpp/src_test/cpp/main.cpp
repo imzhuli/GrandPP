@@ -2,6 +2,7 @@
 #include <core/timer_wheel.hpp>
 #include <iostream>
 #include <network/net_address.hpp>
+#include <pp_common/hostname.hpp>
 
 using namespace std;
 using namespace xel;

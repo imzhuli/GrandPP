@@ -2,7 +2,6 @@
 #include "./report_connection.hpp"
 #include "pp_common/base.hpp"
 
-static auto C   = xAuditControllerConfig();
 static auto IC  = xIoContext();
 static auto ICG = xResourceGuard(IC);
 
@@ -22,11 +21,11 @@ int main(int argc, char ** argv) {
 		cerr << "Failed to get config file" << endl;
 		QuickExit();
 	}
-	C.Load(ConfigFile->c_str());
+	GlobalConfig.Load(ConfigFile->c_str());
 
 	RuntimeAssert(ICG);
 	auto AC  = xAuditReportConnection();
-	auto ACG = xResourceGuard(AC, &IC, C.TestAddress, C.TestAppKey, C.TestAppSecret);
+	auto ACG = xResourceGuard(AC, &IC, GlobalConfig.TestAddress, GlobalConfig.TestAppKey, GlobalConfig.TestAppSecret);
 	RuntimeAssert(ACG);
 
 	while (true) {
