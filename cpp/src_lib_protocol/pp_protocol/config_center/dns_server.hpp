@@ -1,28 +1,29 @@
 #pragma once
 #include "../base.hpp"
 
-class xRegisterDnsServer : xBinaryMessage {
+class xRegisterDnsServer : public xBinaryMessage {
 public:
 	void SerializeMembers() override {
-		W(GroupId, ServerId);
+		W(ForceGroupId, GroupId, ServerId);
 	};
 
 	void DeserializeMembers() override {
-		W(GroupId, ServerId);
+		R(ForceGroupId, GroupId, ServerId);
 	};
 
+	bool      ForceGroupId;
 	xGroupId  GroupId;
 	xServerId ServerId;
 };
 
-class xRegisterDnsServerResp : xBinaryMessage {
+class xRegisterDnsServerResp : public xBinaryMessage {
 public:
 	void SerializeMembers() override {
 		W(Accepted, GroupId);
 	};
 
 	void DeserializeMembers() override {
-		W(Accepted, GroupId);
+		R(Accepted, GroupId);
 	};
 
 	bool     Accepted;

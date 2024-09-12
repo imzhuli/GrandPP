@@ -52,6 +52,7 @@ set(target_list
 	server_config_center
 	server_error
 	server_dns
+	server_dns_dispatcher
 	server_state
 	server_relay_third
 	server_relay_terminal

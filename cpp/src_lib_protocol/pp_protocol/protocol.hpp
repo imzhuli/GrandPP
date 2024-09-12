@@ -55,9 +55,17 @@ static constexpr const xPacketCommandId Cmd_AuthByUserPass          = Cmd_Backen
 static constexpr const xPacketCommandId Cmd_AuthByUserPassResp      = Cmd_BackendBase + 0x202;
 
 // server management:
-static constexpr const xPacketCommandId Cmd_ServerManagementBase  = 0x05'000;
-static constexpr const xPacketCommandId Cmd_QueryRunningState     = Cmd_ServerManagementBase + 1;
-static constexpr const xPacketCommandId Cmd_QueryRunningStateResp = Cmd_ServerManagementBase + 2;
+// clang-format on
+static constexpr const xPacketCommandId Cmd_ServerManagementBase    = 0x05'000;
+static constexpr const xPacketCommandId Cmd_QueryRunningState       = Cmd_ServerManagementBase + 1;
+static constexpr const xPacketCommandId Cmd_QueryRunningStateResp   = Cmd_ServerManagementBase + 2;
+static constexpr const xPacketCommandId Cmd_RegisterDnsServer       = Cmd_ServerManagementBase + 3;  // get dns server group id from config center
+static constexpr const xPacketCommandId Cmd_RegisterDnsServerResp   = Cmd_ServerManagementBase + 4;
+static constexpr const xPacketCommandId Cmd_CheckinDnsServer        = Cmd_ServerManagementBase + 5;  // check into dispatcher with group id from config center
+static constexpr const xPacketCommandId Cmd_CheckinDnsServerResp    = Cmd_ServerManagementBase + 6;
+static constexpr const xPacketCommandId Cmd_EnableDnsDispatcher     = Cmd_ServerManagementBase + 7;
+static constexpr const xPacketCommandId Cmd_EnableDnsDispatcherResp = Cmd_ServerManagementBase + 8;
+// clang-formt on
 
 // terminal-relay:
 static constexpr const xPacketCommandId Cmd_TerminalRelayBase       = 0x06'000;
