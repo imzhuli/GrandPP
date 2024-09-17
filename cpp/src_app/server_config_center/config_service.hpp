@@ -1,10 +1,8 @@
 #pragma once
+#include "./dns_dispatcher.hpp"
+
 #include <pp_common/base.hpp>
 #include <random>
-
-struct xServerAddress {
-	xNetAddress Address;
-};
 
 class xConfigService : xService {
 public:
@@ -16,15 +14,17 @@ protected:
 	void OnClientConnected(xServiceClientConnection & Connection) override;
 	void OnClientClose(xServiceClientConnection & Connection) override;
 	bool OnPacket(xServiceClientConnection & Connection, const xPacketHeader & Header, ubyte * PayloadPtr, size_t PayloadSize) override;
+	void OnCleanupConnection(const xServiceClientConnection & Connection) override;
 
 protected:
 	xNetAddress GetErrorReportServerAddress();
+	bool        OnEnableDnsDispatcher(xServiceClientConnection & Connection, const xPacketHeader & Header, ubyte * PayloadPtr, size_t PayloadSize);
 
 private:
 	xTcpServer Server;
 	xTicker    Ticker;
 
-	std::random_device          RandomDevice;
-	std::minstd_rand            RandomGenerator;
-	std::vector<xServerAddress> ErrorReportServers;
+	std::vector<xNetAddress> ErrorReportServers;
+
+	xDnsDispatcherManager DnsDispatcherManager;
 };

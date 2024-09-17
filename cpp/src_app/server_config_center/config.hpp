@@ -1,6 +1,7 @@
 #pragma once
 #include <pp_common/base.hpp>
 #include <string>
+#include <unordered_map>
 
 struct xGlobaConfig : public xel::xConfigLoader {
 
@@ -15,7 +16,8 @@ struct xGlobaConfig : public xel::xConfigLoader {
 	std::string Mysql_Schema;
 
 	//
-	uint64_t LastUpdateTimestampMS = xel::GetTimestampMS();
+	uint64_t                                  LastUpdateTimestampMS = xel::GetTimestampMS();
+	std::unordered_map<uint32_t, std::string> VersionKeys           = {};
 };
 
 extern xGlobaConfig GlobalConfig;

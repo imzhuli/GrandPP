@@ -8,6 +8,7 @@ import sys
 import xsetup
 
 import _build_mmdb as mmdb
+import _build_json as nlohmann_json
 import _build_abseil as abseil
 import _build_protobuf as protobuf
 
@@ -29,6 +30,10 @@ xsetup.Output()
 # remove temp dir
 cwd = os.getcwd()
 dependency_unzip_dir = f"{cwd}/_3rd_build"
+
+if not nlohmann_json.build():
+    print("failed to build nlohmann_json")
+    exit -1
 
 if not mmdb.build():
     print("failed to build mmdb")

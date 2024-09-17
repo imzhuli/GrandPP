@@ -20,14 +20,12 @@ int main(int argc, char ** argv) {
 		cerr << "Failed to get config file" << endl;
 		QuickExit();
 	}
+	GlobalConfig.Load(ConfigFile->c_str());
 
 	RuntimeAssert(RIC);
 
-	// TODO: Load config
-	auto ListenerAddress = xNetAddress::Parse("0.0.0.0:10010");
-
 	// TODO:
-	auto CSG = xResourceGuard(CS, &IC, ListenerAddress);
+	auto CSG = xResourceGuard(CS, &IC, GlobalConfig.BindAddress);
 	RuntimeAssert(CSG);
 
 	while (true) {

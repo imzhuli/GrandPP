@@ -58,14 +58,18 @@ public:
 
 class xEnableDnsDispatcher : public xBinaryMessage {
 public:
+	static std::string GenerateChallenge(uint64_t UnixTimestamp, uint32_t Version, const std::string & ChallengeKey);
+
 	void SerializeMembers() override {
-		W(ConsumerBindAddress);
-	};
-
+		W(UnixTimestamp, Version, Challenge, ServiceBindAddress, ConsumerBindAddress);
+	}
 	void DeserializeMembers() override {
-		R(ConsumerBindAddress);
-	};
-
+		R(UnixTimestamp, Version, Challenge, ServiceBindAddress, ConsumerBindAddress);
+	}
+	uint64_t    UnixTimestamp;
+	uint32_t    Version;
+	std::string Challenge;
+	xNetAddress ServiceBindAddress;
 	xNetAddress ConsumerBindAddress;
 };
 
