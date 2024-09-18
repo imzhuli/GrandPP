@@ -21,6 +21,7 @@ xCCConnectionBase * xDnsDispatcherManager::AddServerAddress(const xServerAddress
 		return nullptr;
 	}
 	auto & Node              = NodeManager[NodeId];
+	Node.Type                = xConfigServerType::DNS_DISPATCHER;
 	Node.ServerId            = NodeId;
 	Node.ServiceBindAddress  = Address.ServiceBindAddress;
 	Node.ConsumerBindAddress = Address.ConsumerBindAddress;

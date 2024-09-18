@@ -18,6 +18,8 @@ struct xGlobaConfig : public xel::xConfigLoader {
 	//
 	uint64_t                                  LastUpdateTimestampMS = xel::GetTimestampMS();
 	std::unordered_map<uint32_t, std::string> VersionKeys           = {};
+
+	std::string BackendServerListFilename;
 };
 
 extern xGlobaConfig GlobalConfig;

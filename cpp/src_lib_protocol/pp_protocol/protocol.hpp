@@ -65,6 +65,9 @@ static constexpr const xPacketCommandId Cmd_CheckinDnsServer        = Cmd_Server
 static constexpr const xPacketCommandId Cmd_CheckinDnsServerResp    = Cmd_ServerManagementBase + 6;
 static constexpr const xPacketCommandId Cmd_EnableDnsDispatcher     = Cmd_ServerManagementBase + 7;
 static constexpr const xPacketCommandId Cmd_EnableDnsDispatcherResp = Cmd_ServerManagementBase + 8;
+
+static constexpr const xPacketCommandId Cmd_GetBackendServerList     = Cmd_ServerManagementBase + 100;
+static constexpr const xPacketCommandId Cmd_GetBackendServerListResp = Cmd_ServerManagementBase + 101;
 // clang-formt on
 
 // terminal-relay:

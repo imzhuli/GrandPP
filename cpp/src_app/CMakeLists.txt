@@ -32,7 +32,12 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(PLATFORM_LIBRARIES dl ${SYSTEM_CONFIGURATION_LIBRARY} ${FUNDATION_LIBRARY} ${IOKIT_LIBRARY} ${COCOA_LIBRARY} )
 endif()
 
+aux_source_directory(common COMMON_SRC)
+add_library(server_common ${COMMON_SRC})
+target_compile_definitions(server_common PRIVATE X_OPTION_STATIC)
+
 set(lib_dependency
+	server_common
 	${LOCAL_PP_LIBRARIES}
 	${LOCAL_3RD_LIBRARIES}
 	${X_LIBRARIES}

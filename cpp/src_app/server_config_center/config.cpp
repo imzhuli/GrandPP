@@ -46,4 +46,6 @@ void xGlobaConfig::Load(const char * filename) {
 	for (auto & [K, V] : VersionKeys) {
 		cout << K << ":" << V << endl;
 	}
+
+	Optional(BackendServerListFilename, "BackendServerListFilename");
 }

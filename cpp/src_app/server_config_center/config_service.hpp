@@ -12,7 +12,6 @@ public:
 
 protected:
 	void OnClientConnected(xServiceClientConnection & Connection) override;
-	void OnClientClose(xServiceClientConnection & Connection) override;
 	bool OnPacket(xServiceClientConnection & Connection, const xPacketHeader & Header, ubyte * PayloadPtr, size_t PayloadSize) override;
 	void OnCleanupConnection(const xServiceClientConnection & Connection) override;
 

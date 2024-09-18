@@ -35,12 +35,7 @@ void xConfigService::OnClientConnected(xServiceClientConnection & Connection) {
 	X_DEBUG_PRINTF("%s", RemoteAddress.ToString().c_str());
 }
 
-void xConfigService::OnClientClose(xServiceClientConnection & Connection) {
-	// TODO
-}
-
 bool xConfigService::OnPacket(xServiceClientConnection & Connection, const xPacketHeader & Header, ubyte * PayloadPtr, size_t PayloadSize) {
-
 	switch (Header.CommandId) {
 		case Cmd_EnableDnsDispatcher:
 			return OnEnableDnsDispatcher(Connection, Header, PayloadPtr, PayloadSize);
@@ -66,31 +61,32 @@ void xConfigService::OnCleanupConnection(const xServiceClientConnection & Connec
 }
 
 bool xConfigService::OnEnableDnsDispatcher(xServiceClientConnection & Connection, const xPacketHeader & Header, ubyte * PayloadPtr, size_t PayloadSize) {
-	auto TestCP = (xCCConnectionBase *)Connection.GetUserContext().P;
-	if (!TestCP || TestCP->Type != xConfigServerType::UNSPEC) {
-		// error: duplicate auth
+	auto & VP = Connection.GetUserContext().P;
+	if (VP) {
+		X_DEBUG_PRINTF("invalid challenge");
 		return false;
 	}
 
 	auto Req = xEnableDnsDispatcher();
 	if (PayloadSize != Req.Deserialize(PayloadPtr, PayloadSize)) {
+		X_DEBUG_PRINTF("invalid version");
 		return false;
 	}
 	auto Iter = GlobalConfig.VersionKeys.find(Req.Version);
 	if (Iter == GlobalConfig.VersionKeys.end()) {
-		// invalid key
+		X_DEBUG_PRINTF("invalid version");
 		return false;
 	}
 	if (Req.Challenge != Req.GenerateChallenge(Req.UnixTimestamp, Req.Version, Iter->second)) {
-		return false;
-	}
-	auto CP = DnsDispatcherManager.AddServerAddress({ Req.ServiceBindAddress, Req.ConsumerBindAddress });
-	if (!CP) {
-		X_DEBUG_PRINTF("Failed to add to manager");
+		X_DEBUG_PRINTF("invalid key");
 		return false;
 	}
 
-	Connection.GetUserContext().P = CP;
+	VP = DnsDispatcherManager.AddServerAddress({ Req.ServiceBindAddress, Req.ConsumerBindAddress });
+	if (!VP) {
+		X_DEBUG_PRINTF("Failed to add to manager");
+		return false;
+	}
 
 	auto Resp     = xEnableDnsDispatcherResp();
 	Resp.Accepted = true;
@@ -98,6 +94,7 @@ bool xConfigService::OnEnableDnsDispatcher(xServiceClientConnection & Connection
 	auto  RSize = WritePacket(Cmd_EnableDnsDispatcherResp, Header.RequestId, Buffer, sizeof(Buffer), Resp);
 	assert(RSize);
 	Connection.PostData(Buffer, RSize);
+	X_DEBUG_PRINTF("New connection response done");
 
 	return true;
 }

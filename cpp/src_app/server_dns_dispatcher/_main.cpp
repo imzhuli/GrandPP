@@ -1,3 +1,4 @@
+#include "../common/config_center_client.hpp"
 #include "./config.hpp"
 
 #include <pp_common/base.hpp>
@@ -9,16 +10,9 @@ static constexpr const uint32_t DNS_DISPATCHER_VERSION = 0x01;
 static constexpr const char *   DNS_DISPATCHER_KEY     = "Key40x01";
 
 struct xDnsDispatcherServer : public xService {};
-struct xConfigCenterClient : public xClient {
+struct xConfigCenterClient : public xCCClient {
 
-	void Tick(uint64_t NowMS) {
-		if (!Ready && NowMS - PrepareTimestampMS >= 3'000) {
-			Kill();
-		}
-		xClient::Tick(NowMS);
-	}
-
-	void OnServerConnected() override {
+	void PostChallengeRequest() override {
 		X_DEBUG_PRINTF("");
 		PrepareTimestampMS = GetTimestampMS();
 
@@ -33,11 +27,7 @@ struct xConfigCenterClient : public xClient {
 		PostData(Buffer, RSize);
 	}
 
-	void OnServerClose() override {
-		Ready = false;
-	}
-
-	bool OnPacket(const xPacketHeader & Header, ubyte * PayloadPtr, size_t PayloadSize) override {
+	bool OnChallengeResponse(const xPacketHeader & Header, ubyte * PayloadPtr, size_t PayloadSize) override {
 		if (Header.CommandId != Cmd_EnableDnsDispatcherResp) {
 			return false;
 		}
@@ -47,12 +37,14 @@ struct xConfigCenterClient : public xClient {
 			return false;
 		}
 		X_DEBUG_PRINTF("Accepted");
-		Ready = true;
+		return true;
+	}
+
+	bool OnCCPacket(const xPacketHeader & Header, ubyte * PayloadPtr, size_t PayloadSize) override {
 		return true;
 	}
 
 private:
-	bool     Ready              = false;
 	uint64_t PrepareTimestampMS = 0;
 };
 
