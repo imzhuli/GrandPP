@@ -1,4 +1,4 @@
-#include "../common/config_center_client.hpp"
+#include "../common/challenge_client.hpp"
 #include "./config.hpp"
 
 #include <pp_common/base.hpp>
@@ -10,7 +10,7 @@ static constexpr const uint32_t DNS_DISPATCHER_VERSION = 0x01;
 static constexpr const char *   DNS_DISPATCHER_KEY     = "Key40x01";
 
 struct xDnsDispatcherServer : public xService {};
-struct xConfigCenterClient : public xCCClient {
+struct xConfigCenterClient : public xCClient {
 
 	void PostChallengeRequest() override {
 		X_DEBUG_PRINTF("");
@@ -40,7 +40,7 @@ struct xConfigCenterClient : public xCCClient {
 		return true;
 	}
 
-	bool OnCCPacket(const xPacketHeader & Header, ubyte * PayloadPtr, size_t PayloadSize) override {
+	bool OnBusinessPacket(const xPacketHeader & Header, ubyte * PayloadPtr, size_t PayloadSize) override {
 		return true;
 	}
 

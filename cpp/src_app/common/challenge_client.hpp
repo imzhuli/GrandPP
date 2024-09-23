@@ -1,7 +1,7 @@
 #pragma once
 #include <server_arch/client.hpp>
 
-class xCCClient : private xel::xClient {
+class xCClient : private xel::xClient {
 
 public:
 	bool Init(xel::xIoContext * ICP, const xel::xNetAddress & TargetAddress);
@@ -14,9 +14,10 @@ public:
 
 protected:
 	using xClient::PostData;
+	using xClient::SetMaxWriteBuffer;
 	virtual void PostChallengeRequest()                                                                              = 0;
 	virtual bool OnChallengeResponse(const xel::xPacketHeader & Header, xel::ubyte * PayloadPtr, size_t PayloadSize) = 0;
-	virtual bool OnCCPacket(const xel::xPacketHeader & Header, xel::ubyte * PayloadPtr, size_t PayloadSize)          = 0;
+	virtual bool OnBusinessPacket(const xel::xPacketHeader & Header, xel::ubyte * PayloadPtr, size_t PayloadSize)    = 0;
 	virtual void OnCCReady() {};
 	virtual void OnCCClose() {};
 
