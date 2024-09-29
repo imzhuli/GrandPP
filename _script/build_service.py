@@ -19,7 +19,7 @@ j_threads = ""
 
 try:
     argv = sys.argv[1:]
-    opts, args = getopt.getopt(argv, "r:x:j:")
+    opts, args = getopt.getopt(argv, "rx:j:")
 except getopt.GetoptError:
     sys.exit(2)
 for opt, arg in opts:
