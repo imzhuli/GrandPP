@@ -18,7 +18,7 @@ def build():
 		return False
 
 	if not os.path.exists(install_header_dir):
-		os.path.mkdir(parents=True)
+		os.makedirs(install_header_dir)
 
 	if not os.path.isdir(install_header_dir):
 		print("failed to setup install dir")
