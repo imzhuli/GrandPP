@@ -4,6 +4,7 @@
 
 bool xPPHttpProxyClient::Init(xPPHttpProxyOptions & Options) {
 	auto TC = Options.ThreadContext ? Options.ThreadContext : PPGetMainThreadContext();
+	Touch(TC);
 	assert(TC);
 	assert(Options.ProxyServerHostView.size());
 	assert(Options.TargetHostView.size());
