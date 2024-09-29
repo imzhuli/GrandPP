@@ -1,6 +1,7 @@
 #include "./http_proxy_client.hpp"
 
 #include <crypto/base64.hpp>
+using namespace xel;
 
 bool xPPHttpProxyClient::Init(xPPHttpProxyOptions & Options) {
 	auto TC = Options.ThreadContext ? Options.ThreadContext : PPGetMainThreadContext();
