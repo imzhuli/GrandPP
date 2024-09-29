@@ -54,9 +54,12 @@ cm = 'cmake -Wno-dev ' \
     f'-DX_LIB="{x_path}" ' \
     f'-DCMAKE_INSTALL_PREFIX={full_install_dir!r} -B "{build_path}" "{src_dir}"'
 print(cm)
-os.system(cm)
+if 0 != os.system(cm):
+    sys.exit(3)
 
 cmb = f'cmake --build "{build_path}" {xsetup.cmake_build_config} -- {j_threads}'
 print(cmb)
-os.system(cmb)
-os.system(f'cmake --install "{build_path}" {xsetup.cmake_build_config}')
+if 0 != os.system(cmb):
+    sys.exit(4)
+if 0 != os.system(f'cmake --install "{build_path}" {xsetup.cmake_build_config}'):
+    sys.exit(5)
