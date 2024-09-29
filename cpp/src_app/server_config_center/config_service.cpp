@@ -32,6 +32,7 @@ void xConfigService::Tick() {
 
 void xConfigService::OnClientConnected(xServiceClientConnection & Connection) {
 	auto RemoteAddress = Connection.GetRemoteAddress();
+	Touch(RemoteAddress);
 	X_DEBUG_PRINTF("%s", RemoteAddress.ToString().c_str());
 }
 

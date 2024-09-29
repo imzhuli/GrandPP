@@ -41,7 +41,7 @@ void xAuditReportConnection::Tick() {
 	if (State == eState::SetupReady) {
 		// reconnect:
 		auto NowMS = xel::GetTimestampMS();
-		if (SignedDiff(NowMS, LastConnectStartTimestamp) < MinReconnectTimeoutMS) {
+		if (SignedDiff(NowMS, LastConnectStartTimestamp) < MakeSigned(MinReconnectTimeoutMS)) {
 			return;
 		}
 		X_DEBUG_PRINTF("Trying to connect");
